@@ -1,10 +1,7 @@
 package com.holidevs.ventas.modelos;
-
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,59 +9,39 @@ import java.util.List;
 @Entity
 @Getter
 @NoArgsConstructor
-@ToString
 public class Empleado {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id", nullable = false)
-    private Long numeroEmpleado;
-
-    public Long getNumeroEmpleado() {
-        return numeroEmpleado;
-    }
+    private Long id;
+    private String numeroEmpleado;
     private String nombre;
     private String apellidos;
     private String extension;
     private String email;
     private String titulacionEstudiosMaximos;
+    private boolean esSupervisor;
+    @ManyToOne
+    private Oficina oficina;
 
     @ManyToOne
-    @JoinColumn(name = "supervisor_id")
     private Empleado supervisor;
 
     @OneToMany(mappedBy = "supervisor")
     private List<Empleado> subordinados = new ArrayList<>();
 
-    @ManyToOne
-    private Oficina oficina;
-
-    public Empleado(String nombre, String apellidos, String extension, String email, String titulacionEstudiosMaximos, Oficina oficina) {
-        this.nombre = nombre;
-        this.apellidos = apellidos;
-        this.extension = extension;
-        this.email = email;
-        this.titulacionEstudiosMaximos = titulacionEstudiosMaximos;
-        this.oficina = oficina;
-    }
-
-    public Empleado(String nombre, String apellidos, String extension, String email, String titulacionEstudiosMaximos, Empleado supervisor, List<Empleado> subordinados, Oficina oficina) {
-        this.nombre = nombre;
-        this.apellidos = apellidos;
-        this.extension = extension;
-        this.email = email;
-        this.titulacionEstudiosMaximos = titulacionEstudiosMaximos;
+    public void setSupervisor(Empleado supervisor) {
         this.supervisor = supervisor;
-        this.subordinados = subordinados;
-        this.oficina = oficina;
     }
 
-    public Empleado(String nombre, String apellidos, String extension, String email, String titulacionEstudiosMaximos, List<Empleado> subordinados, Oficina oficina) {
+    public Empleado(String numeroEmpleado, String nombre, String apellidos, String extension, String email, String titulacionEstudiosMaximos, boolean esSupervisor, Oficina oficina) {
+        this.numeroEmpleado = numeroEmpleado;
         this.nombre = nombre;
         this.apellidos = apellidos;
         this.extension = extension;
         this.email = email;
         this.titulacionEstudiosMaximos = titulacionEstudiosMaximos;
-        this.subordinados = subordinados;
+        this.esSupervisor = esSupervisor;
         this.oficina = oficina;
     }
 
@@ -96,28 +73,36 @@ public class Empleado {
         this.oficina = oficina;
     }
 
-    public void asignarSupervisor(Empleado supervisor) {
-        this.supervisor = supervisor;
-        if (supervisor != null && !supervisor.getSubordinados().contains(this)) {
-            supervisor.agregarSubordinado(this);
-        }
+    public List<Empleado> getSubordinados() {
+        return subordinados;
     }
 
     public void agregarSubordinado(Empleado subordinado) {
         subordinados.add(subordinado);
-        subordinado.setSupervisor(this);
     }
 
-    public void removerSubordinado(Empleado subordinado) {
-        subordinados.remove(subordinado);
-        subordinado.setSupervisor(null);
+
+    public boolean isEsSupervisor() {
+        return esSupervisor;
     }
 
-    public Empleado getSupervisor() {
-        return supervisor;
+    public void setEsSupervisor(boolean esSupervisor) {
+        this.esSupervisor = esSupervisor;
     }
 
-    public void setSupervisor(Empleado supervisor) {
-        this.supervisor = supervisor;
+    @Override
+    public String toString() {
+        return "Empleado{" +
+                "id=" + id +
+                ", numeroEmpleado='" + numeroEmpleado + '\'' +
+                ", nombre='" + nombre + '\'' +
+                ", apellidos='" + apellidos + '\'' +
+                ", extension='" + extension + '\'' +
+                ", email='" + email + '\'' +
+                ", titulacionEstudiosMaximos='" + titulacionEstudiosMaximos + '\'' +
+                ", esSupervisor=" + esSupervisor +
+                ", oficina=" + oficina +
+                ", supervisor=" + supervisor +
+                '}';
     }
 }

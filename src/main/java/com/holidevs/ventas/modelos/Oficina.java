@@ -11,7 +11,6 @@ import java.util.List;
 @Entity
 @Getter
 @NoArgsConstructor
-@ToString
 public class Oficina {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -80,4 +79,5 @@ public class Oficina {
         empleados.remove(empleado);
         empleado.setOficina(null);
     }
+
 }
