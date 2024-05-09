@@ -1,7 +1,9 @@
 package com.holidevs.ventas;
 
+import com.holidevs.ventas.modelos.Admin;
 import com.holidevs.ventas.modelos.Empleado;
 import com.holidevs.ventas.modelos.Oficina;
+import com.holidevs.ventas.repositorios.AdminRepository;
 import com.holidevs.ventas.repositorios.EmpleadoRepository;
 import com.holidevs.ventas.repositorios.OficinaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +20,9 @@ public class VentasApplication implements CommandLineRunner {
 
 	@Autowired
 	OficinaRepository oficinaRepository;
+
+	@Autowired
+	AdminRepository adminRepository;
 	public static void main(String[] args)  {
 		SpringApplication.run(VentasApplication.class, args);
 
@@ -25,6 +30,9 @@ public class VentasApplication implements CommandLineRunner {
 
 	@Override
 	public void run(String... args) throws Exception {
+
+		Admin Roberto = new Admin("Roberto", "Vetere", "roberto.vetere@gmail.com", "admin", "1234");
+		adminRepository.save(Roberto);
 		Oficina oficina = new Oficina("123456789", "Calle Principal 123", "Ciudad", "Provincia", "12345", "Pais");
 		Empleado empleado1 = new Empleado("asdfhs54","Juan", "Pérez", "123", "juan@example.com", "Licenciatura en Administración", true, oficina);
 		Empleado empleado2 = new Empleado("sgsgasg654","María", "García", "456", "maria@example.com", "Ingeniería Informática", false, oficina);
